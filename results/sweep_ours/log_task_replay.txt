@@ -1,0 +1,7 @@
+strategy=replay scenario=task eval=val device=cpu cfg={'epochs': 2, 'batch_size': 64, 'lr': 0.01, 'momentum': 0.9, 'scenario': 'task'} hparams={'mem_size': 500, 'ewc_lambda': 10000.0, 'fisher_samples': 1000}
+  final avg acc = 98.74%   forgetting = 0.45%
+
+  final avg acc = 98.77%   forgetting = 0.28%
+
+== replay (task-IL, 2 seed(s)): ACC 98.75 ± 0.01%  forgetting 0.37 ± 0.09%  [val]
+saved results/sweep_ours/replay_task_val.json

@@ -1,0 +1,188 @@
+{
+  "dataset": "cifar10",
+  "strategy": "naive",
+  "config": {
+    "epochs": 5,
+    "batch_size": 64,
+    "lr": 0.03,
+    "momentum": 0.9,
+    "scenario": "class"
+  },
+  "hparams": {
+    "mem_size": 500,
+    "ewc_lambda": 10000.0,
+    "fisher_samples": 1000,
+    "der_alpha": 0.3,
+    "der_beta": 0.5
+  },
+  "eval_split": "test",
+  "device": "cuda",
+  "n_tasks": 5,
+  "summary": {
+    "final_avg_acc_mean": 0.18686666666666665,
+    "final_avg_acc_std": 0.0026398653164297734,
+    "forgetting_mean": 0.8689166666666667,
+    "forgetting_std": 0.012203710728936354
+  },
+  "runs": [
+    {
+      "seed": 0,
+      "acc_matrix": [
+        [
+          0.948,
+          NaN,
+          NaN,
+          NaN,
+          NaN
+        ],
+        [
+          0.0,
+          0.825,
+          NaN,
+          NaN,
+          NaN
+        ],
+        [
+          0.0,
+          0.0,
+          0.7915,
+          NaN,
+          NaN
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.8855,
+          NaN
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.917
+        ]
+      ],
+      "avg_acc_curve": [
+        0.948,
+        0.4125,
+        0.2638333333333333,
+        0.221375,
+        0.1834
+      ],
+      "final_avg_acc": 0.1834,
+      "forgetting": 0.8624999999999999,
+      "runtime_s": 87.6202163696289,
+      "stats": {
+        "grad_steps": 3525
+      }
+    },
+    {
+      "seed": 1,
+      "acc_matrix": [
+        [
+          0.9605,
+          NaN,
+          NaN,
+          NaN,
+          NaN
+        ],
+        [
+          0.0,
+          0.8495,
+          NaN,
+          NaN,
+          NaN
+        ],
+        [
+          0.0,
+          0.0,
+          0.835,
+          NaN,
+          NaN
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.899,
+          NaN
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.949
+        ]
+      ],
+      "avg_acc_curve": [
+        0.9605,
+        0.42475,
+        0.2783333333333333,
+        0.22475,
+        0.1898
+      ],
+      "final_avg_acc": 0.1898,
+      "forgetting": 0.886,
+      "runtime_s": 86.88117933273315,
+      "stats": {
+        "grad_steps": 3525
+      }
+    },
+    {
+      "seed": 2,
+      "acc_matrix": [
+        [
+          0.9635,
+          NaN,
+          NaN,
+          NaN,
+          NaN
+        ],
+        [
+          0.0,
+          0.806,
+          NaN,
+          NaN,
+          NaN
+        ],
+        [
+          0.0,
+          0.0,
+          0.7745,
+          NaN,
+          NaN
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.889,
+          NaN
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.937
+        ]
+      ],
+      "avg_acc_curve": [
+        0.9635,
+        0.403,
+        0.25816666666666666,
+        0.22225,
+        0.1874
+      ],
+      "final_avg_acc": 0.1874,
+      "forgetting": 0.85825,
+      "runtime_s": 86.75813341140747,
+      "stats": {
+        "grad_steps": 3525
+      }
+    }
+  ]
+}

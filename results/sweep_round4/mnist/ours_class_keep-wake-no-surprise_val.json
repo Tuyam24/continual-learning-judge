@@ -1,0 +1,373 @@
+{
+  "dataset": "mnist",
+  "strategy": "ours",
+  "config": {
+    "epochs": 2,
+    "batch_size": 64,
+    "lr": 0.01,
+    "momentum": 0.9,
+    "scenario": "class"
+  },
+  "hparams": {
+    "mem_size": 500,
+    "ewc_lambda": 10000.0,
+    "fisher_samples": 1000,
+    "der_alpha": 0.5,
+    "der_beta": 0.5,
+    "rollback_mode": "sleep_only",
+    "use_surprise": false
+  },
+  "eval_split": "val",
+  "device": "cpu",
+  "n_tasks": 5,
+  "summary": {
+    "final_avg_acc_mean": 0.8145543480165074,
+    "final_avg_acc_std": 0.017327038576326212,
+    "forgetting_mean": 0.20957816486033512,
+    "forgetting_std": 0.02379345679395177
+  },
+  "runs": [
+    {
+      "seed": 0,
+      "acc_matrix": [
+        [
+          0.9975530179445351,
+          NaN,
+          NaN,
+          NaN,
+          NaN
+        ],
+        [
+          0.9461663947797716,
+          0.9717465753424658,
+          NaN,
+          NaN,
+          NaN
+        ],
+        [
+          0.9257748776508973,
+          0.8441780821917808,
+          0.992633517495396,
+          NaN,
+          NaN
+        ],
+        [
+          0.898042414355628,
+          0.7397260273972602,
+          0.858195211786372,
+          0.9915110356536503,
+          NaN
+        ],
+        [
+          0.8809135399673735,
+          0.6909246575342466,
+          0.8038674033149171,
+          0.8353140916808149,
+          0.9666666666666667
+        ]
+      ],
+      "avg_acc_curve": [
+        0.9975530179445351,
+        0.9589564850611187,
+        0.9208621591126914,
+        0.8718686722982277,
+        0.8355372718328036
+      ],
+      "final_avg_acc": 0.8355372718328036,
+      "forgetting": 0.18560611348467373,
+      "runtime_s": 2.4558370113372803,
+      "stats": {
+        "wake_steps": 1694,
+        "sleep_steps": 700,
+        "retry_steps": 650,
+        "grad_steps": 3044,
+        "discarded_wake_steps": 0,
+        "discarded_sleep_steps": 330,
+        "discarded_retry_steps": 320,
+        "consolidations": 70,
+        "judge_evals": 120,
+        "rollbacks": 65,
+        "retries": 65,
+        "forced_accepts": 31,
+        "samples_seen": 108004,
+        "samples_learned": 108004,
+        "samples_stored_fast": 54002,
+        "ltm_candidates": 54002,
+        "max_mem_used": 500,
+        "max_judge_drift": 1.0,
+        "tradeoff_accepts": 0,
+        "judge_stopped_tasks": 0,
+        "per_task": [
+          {
+            "task": 0,
+            "rollbacks": 0,
+            "forced_accepts": 0,
+            "max_judge_drift": 0.0,
+            "grad_steps": 508,
+            "mem_used_end": 450
+          },
+          {
+            "task": 1,
+            "rollbacks": 2,
+            "forced_accepts": 1,
+            "max_judge_drift": 1.0,
+            "grad_steps": 502,
+            "mem_used_end": 448
+          },
+          {
+            "task": 2,
+            "rollbacks": 25,
+            "forced_accepts": 11,
+            "max_judge_drift": 0.525,
+            "grad_steps": 698,
+            "mem_used_end": 450
+          },
+          {
+            "task": 3,
+            "rollbacks": 10,
+            "forced_accepts": 5,
+            "max_judge_drift": 0.55,
+            "grad_steps": 584,
+            "mem_used_end": 448
+          },
+          {
+            "task": 4,
+            "rollbacks": 28,
+            "forced_accepts": 14,
+            "max_judge_drift": 0.525,
+            "grad_steps": 752,
+            "mem_used_end": 450
+          }
+        ]
+      }
+    },
+    {
+      "seed": 1,
+      "acc_matrix": [
+        [
+          0.99836867862969,
+          NaN,
+          NaN,
+          NaN,
+          NaN
+        ],
+        [
+          0.9584013050570962,
+          0.978595890410959,
+          NaN,
+          NaN,
+          NaN
+        ],
+        [
+          0.9249592169657422,
+          0.8159246575342466,
+          0.9871086556169429,
+          NaN,
+          NaN
+        ],
+        [
+          0.8849918433931484,
+          0.7722602739726028,
+          0.8692449355432781,
+          0.9940577249575552,
+          NaN
+        ],
+        [
+          0.8564437194127243,
+          0.6523972602739726,
+          0.651012891344383,
+          0.830220713073005,
+          0.9754385964912281
+        ]
+      ],
+      "avg_acc_curve": [
+        0.99836867862969,
+        0.9684985977340276,
+        0.9093308433723105,
+        0.880138694466646,
+        0.7931026361190626
+      ],
+      "final_avg_acc": 0.7931026361190626,
+      "forgetting": 0.24201409137776553,
+      "runtime_s": 2.4644522666931152,
+      "stats": {
+        "wake_steps": 1694,
+        "sleep_steps": 700,
+        "retry_steps": 720,
+        "grad_steps": 3114,
+        "discarded_wake_steps": 0,
+        "discarded_sleep_steps": 390,
+        "discarded_retry_steps": 330,
+        "consolidations": 70,
+        "judge_evals": 127,
+        "rollbacks": 72,
+        "retries": 72,
+        "forced_accepts": 33,
+        "samples_seen": 108004,
+        "samples_learned": 108004,
+        "samples_stored_fast": 54002,
+        "ltm_candidates": 54002,
+        "max_mem_used": 500,
+        "max_judge_drift": 1.0,
+        "tradeoff_accepts": 0,
+        "judge_stopped_tasks": 0,
+        "per_task": [
+          {
+            "task": 0,
+            "rollbacks": 0,
+            "forced_accepts": 0,
+            "max_judge_drift": 0.0,
+            "grad_steps": 508,
+            "mem_used_end": 450
+          },
+          {
+            "task": 1,
+            "rollbacks": 2,
+            "forced_accepts": 1,
+            "max_judge_drift": 1.0,
+            "grad_steps": 502,
+            "mem_used_end": 448
+          },
+          {
+            "task": 2,
+            "rollbacks": 14,
+            "forced_accepts": 4,
+            "max_judge_drift": 0.875,
+            "grad_steps": 588,
+            "mem_used_end": 450
+          },
+          {
+            "task": 3,
+            "rollbacks": 28,
+            "forced_accepts": 14,
+            "max_judge_drift": 0.4,
+            "grad_steps": 764,
+            "mem_used_end": 448
+          },
+          {
+            "task": 4,
+            "rollbacks": 28,
+            "forced_accepts": 14,
+            "max_judge_drift": 0.475,
+            "grad_steps": 752,
+            "mem_used_end": 450
+          }
+        ]
+      }
+    },
+    {
+      "seed": 2,
+      "acc_matrix": [
+        [
+          0.9975530179445351,
+          NaN,
+          NaN,
+          NaN,
+          NaN
+        ],
+        [
+          0.9600326264274062,
+          0.910958904109589,
+          NaN,
+          NaN,
+          NaN
+        ],
+        [
+          0.9053833605220228,
+          0.8261986301369864,
+          0.9953959484346224,
+          NaN,
+          NaN
+        ],
+        [
+          0.8833605220228385,
+          0.7816780821917808,
+          0.8443830570902394,
+          0.9932088285229203,
+          NaN
+        ],
+        [
+          0.8727569331158238,
+          0.6815068493150684,
+          0.7090239410681399,
+          0.8293718166383701,
+          0.9824561403508771
+        ]
+      ],
+      "avg_acc_curve": [
+        0.9975530179445351,
+        0.9354957652684976,
+        0.908992646364544,
+        0.8756576224569447,
+        0.8150231360976559
+      ],
+      "final_avg_acc": 0.8150231360976559,
+      "forgetting": 0.20111428971856612,
+      "runtime_s": 2.690810203552246,
+      "stats": {
+        "wake_steps": 1694,
+        "sleep_steps": 700,
+        "retry_steps": 930,
+        "grad_steps": 3324,
+        "discarded_wake_steps": 0,
+        "discarded_sleep_steps": 480,
+        "discarded_retry_steps": 450,
+        "consolidations": 70,
+        "judge_evals": 148,
+        "rollbacks": 93,
+        "retries": 93,
+        "forced_accepts": 43,
+        "samples_seen": 108004,
+        "samples_learned": 108004,
+        "samples_stored_fast": 54002,
+        "ltm_candidates": 54002,
+        "max_mem_used": 500,
+        "max_judge_drift": 0.7,
+        "tradeoff_accepts": 0,
+        "judge_stopped_tasks": 0,
+        "per_task": [
+          {
+            "task": 0,
+            "rollbacks": 0,
+            "forced_accepts": 0,
+            "max_judge_drift": 0.0,
+            "grad_steps": 508,
+            "mem_used_end": 450
+          },
+          {
+            "task": 1,
+            "rollbacks": 17,
+            "forced_accepts": 7,
+            "max_judge_drift": 0.7,
+            "grad_steps": 652,
+            "mem_used_end": 448
+          },
+          {
+            "task": 2,
+            "rollbacks": 22,
+            "forced_accepts": 9,
+            "max_judge_drift": 0.625,
+            "grad_steps": 668,
+            "mem_used_end": 450
+          },
+          {
+            "task": 3,
+            "rollbacks": 28,
+            "forced_accepts": 14,
+            "max_judge_drift": 0.65,
+            "grad_steps": 764,
+            "mem_used_end": 448
+          },
+          {
+            "task": 4,
+            "rollbacks": 26,
+            "forced_accepts": 13,
+            "max_judge_drift": 0.55,
+            "grad_steps": 732,
+            "mem_used_end": 450
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,660 @@
+<title>The Forgetting Experiment</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a course notebook. Sticky contents rail on wide screens, one ~68ch reading column,
+   interactive "bench" panels set off from the prose. Ink-blue for learning, amber for forgetting. */
+:root {
+  --bg: #f5f7fa;
+  --surface: #ffffff;
+  --ink: #17202c;
+  --muted: #5a6577;
+  --line: #dde3eb;
+  --accent: #2557d6;      /* ink blue: learning, links, "ours" */
+  --accent-soft: #e6edfc;
+  --forget: #c26a00;      /* amber: forgetting */
+  --forget-soft: #fbefdf;
+  --good: #1f8a5b;
+  --hi: #2557d6;          /* heatmap high */
+  --lo: #f3e3cf;          /* heatmap low */
+  --code-bg: #eef2f7;
+  --display: "Bricolage Grotesque", "Space Grotesk", system-ui, sans-serif;
+  --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0f141b; --surface: #161d27; --ink: #e5eaf1; --muted: #9aa6b6; --line: #273141;
+  --accent: #7ea2ff; --accent-soft: #1b2741; --forget: #f0a54a; --forget-soft: #2d2213;
+  --good: #4cc38a; --hi: #5d86f5; --lo: #3a2c1b; --code-bg: #1b2430; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0f141b; --surface: #161d27; --ink: #e5eaf1; --muted: #9aa6b6; --line: #273141;
+  --accent: #7ea2ff; --accent-soft: #1b2741; --forget: #f0a54a; --forget-soft: #2d2213;
+  --good: #4cc38a; --hi: #5d86f5; --lo: #3a2c1b; --code-bg: #1b2430; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 16px/1.65 var(--body); }
+a { color: var(--accent); }
+.wrap { max-width: 1120px; margin: 0 auto; padding-block: 40px 80px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 56px; }
+@media (max-width: 860px) { .wrap { grid-template-columns: minmax(0, 1fr); gap: 24px; padding-block: 24px 64px; } }
+
+nav.toc { position: sticky; top: calc(24px + env(safe-area-inset-top, 0px)); align-self: start; font-size: 14px; }
+nav.toc .k { font: 500 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 18px 0 8px; }
+nav.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+nav.toc a { color: var(--muted); text-decoration: none; display: block; padding: 2px 0; }
+nav.toc a:hover, nav.toc a:focus-visible { color: var(--accent); }
+@media (max-width: 860px) { nav.toc { position: static; border: 1px solid var(--line); border-radius: 10px; padding: 4px 16px 14px; background: var(--surface); }
+  nav.toc .parts { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0 20px; } }
+
+main { min-width: 0; max-width: 72ch; }
+header.hero { padding-bottom: 28px; border-bottom: 1px solid var(--line); margin-bottom: 8px; }
+.eyebrow { font: 500 12px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
+h1 { font: 700 clamp(34px, 6vw, 54px)/1.05 var(--display); margin: 14px 0 16px; text-wrap: balance; letter-spacing: -.01em; }
+h1 .f { color: var(--forget); }
+.lede { font-size: 19px; color: var(--muted); margin: 0; }
+.pairs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; align-items: center; }
+.pair { font: 500 15px/1 var(--mono); padding: 9px 12px; border-radius: 8px; background: var(--surface); border: 1px solid var(--line); }
+.pair small { color: var(--muted); font-size: 11px; margin-right: 6px; }
+.arrow { color: var(--muted); }
+
+section.part { padding-top: 56px; }
+.partno { font: 500 12px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+h2 { font: 700 34px/1.15 var(--display); margin: 8px 0 12px; text-wrap: balance; }
+h3 { font: 700 22px/1.25 var(--display); margin: 40px 0 8px; text-wrap: balance; }
+h4 { font: 600 16px/1.4 var(--body); margin: 24px 0 4px; }
+p { margin: 0 0 14px; }
+ul, ol.steps { padding-left: 22px; margin: 0 0 14px; }
+li { margin-bottom: 6px; }
+code { font: 0.88em var(--mono); background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+pre { background: var(--code-bg); border-radius: 10px; padding: 14px 16px; overflow-x: auto; font: 13.5px/1.6 var(--mono); margin: 0 0 16px; }
+pre code { background: none; padding: 0; font: inherit; }
+.c { color: var(--muted); }
+strong { font-weight: 600; }
+
+.note { border-left: 3px solid var(--accent); background: var(--accent-soft); padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 0 0 18px; }
+.note.warn { border-color: var(--forget); background: var(--forget-soft); }
+.note p:last-child { margin: 0; }
+
+.term { display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 4px 18px; padding: 12px 0; border-top: 1px solid var(--line); }
+.term:last-child { border-bottom: 1px solid var(--line); }
+.term dt { font-weight: 600; }
+.term dd { margin: 0; color: var(--ink); }
+@media (max-width: 520px) { .term { grid-template-columns: minmax(0, 1fr); } }
+
+.tablewrap { overflow-x: auto; margin: 0 0 18px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14.5px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 9px 14px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { font: 500 12px/1.3 var(--mono); letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+td.num { text-align: right; }
+tr.us td { background: var(--accent-soft); font-weight: 600; }
+
+/* bench = interactive panel */
+.bench { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; margin: 8px 0 22px; }
+.bench .label { font: 500 11px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+.controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px; }
+button.seg { font: 500 13px/1 var(--body); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); cursor: pointer; }
+button.seg[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+button.seg:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.sep { width: 1px; height: 24px; background: var(--line); margin: 0 4px; }
+input[type=range] { width: min(260px, 100%); accent-color: var(--accent); }
+.readout { font: 500 13px/1.4 var(--mono); color: var(--muted); }
+.readout b { color: var(--ink); font-weight: 500; }
+
+#gd svg { width: 100%; height: auto; display: block; }
+.curve { fill: none; stroke: var(--muted); stroke-width: 2; }
+.axis { stroke: var(--line); stroke-width: 1; }
+.trail { fill: none; stroke: var(--accent); stroke-width: 1.5; stroke-dasharray: 4 3; }
+.ball { fill: var(--accent); }
+.ball.boom { fill: var(--forget); }
+.tick { fill: var(--muted); font: 11px var(--mono); }
+
+.matrix { display: grid; grid-template-columns: 74px repeat(5, minmax(0, 1fr)); gap: 4px; font: 500 13px/1 var(--mono); font-variant-numeric: tabular-nums; }
+.matrix .h { color: var(--muted); font-size: 11px; display: flex; align-items: center; justify-content: center; padding: 6px 0; }
+.matrix .rh { justify-content: flex-start; }
+.matrix .cell { aspect-ratio: 1.6; max-width: 100%; display: flex; align-items: center; justify-content: center; border-radius: 6px; color: var(--ink); }
+.matrix .cell.empty { background: transparent; border: 1px dashed var(--line); }
+.matrix .cell.dark { color: #fff; }
+.mstats { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-top: 14px; font-size: 14px; }
+.mstats b { font: 600 20px/1.1 var(--display); display: block; }
+.mstats .fg b { color: var(--forget); }
+.mstats .ac b { color: var(--accent); }
+
+.bars { display: grid; gap: 10px; margin: 6px 0 4px; }
+.bar { display: grid; grid-template-columns: 150px minmax(0, 1fr) 64px; gap: 12px; align-items: center; font-size: 14px; }
+.bar .track { height: 14px; background: var(--bg); border-radius: 4px; position: relative; border: 1px solid var(--line); }
+.bar .fill { position: absolute; inset: 0 auto 0 0; background: var(--muted); border-radius: 3px; }
+.bar.us .fill { background: var(--accent); }
+.bar .v { font: 500 13px var(--mono); text-align: right; font-variant-numeric: tabular-nums; }
+@media (max-width: 520px) { .bar { grid-template-columns: 96px minmax(0, 1fr) 56px; font-size: 13px; } }
+.axisnote { font: 11px var(--mono); color: var(--muted); display: flex; justify-content: space-between; margin-left: 162px; margin-right: 76px; }
+@media (max-width: 520px) { .axisnote { margin-left: 108px; margin-right: 68px; } }
+
+.files { display: grid; gap: 14px; margin: 10px 0 20px; }
+.file { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; min-width: 0; }
+.file .path { font: 500 14px var(--mono); color: var(--accent); }
+.file .lines { font: 12px var(--mono); color: var(--muted); margin-left: 8px; }
+.file p { margin: 6px 0 8px; }
+.file ul { margin-bottom: 8px; }
+.file pre { margin: 6px 0 0; font-size: 12.5px; }
+
+.parts5 { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin: 8px 0 20px; }
+.comp { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; background: var(--surface); min-width: 0; }
+.comp .n { font: 600 15px/1.3 var(--display); }
+.comp .tag { font: 500 11px var(--mono); color: var(--muted); }
+.comp p { margin: 6px 0 0; font-size: 14px; }
+
+.status { display: inline-flex; align-items: center; gap: 8px; font: 500 12px var(--mono); padding: 5px 10px; border-radius: 999px; background: var(--forget-soft); color: var(--forget); }
+.status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+footer { margin-top: 64px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+<nav class="toc" aria-label="Contents">
+  <div class="parts">
+  <div>
+    <div class="k">Part 1 · Basics</div>
+    <ol>
+      <li><a href="#network">What a neural network is</a></li>
+      <li><a href="#training">How training works</a></li>
+      <li><a href="#splits">Train, val, test</a></li>
+      <li><a href="#forgetting">Catastrophic forgetting</a></li>
+      <li><a href="#measuring">Measuring forgetting</a></li>
+    </ol>
+  </div>
+  <div>
+    <div class="k">Part 2 · The code</div>
+    <ol>
+      <li><a href="#layout">How the project fits together</a></li>
+      <li><a href="#files">Every file, explained</a></li>
+      <li><a href="#run">Running it yourself</a></li>
+    </ol>
+  </div>
+  <div>
+    <div class="k">Part 3 · The experiment</div>
+    <ol>
+      <li><a href="#methods">The methods we compared</a></li>
+      <li><a href="#yours">Your method</a></li>
+      <li><a href="#results">Results on MNIST</a></li>
+      <li><a href="#ablations">Which parts matter</a></li>
+      <li><a href="#bugs">Bugs we caught</a></li>
+      <li><a href="#prior">Is it new?</a></li>
+      <li><a href="#next">Round 2: DER++ and CIFAR-10</a></li>
+      <li><a href="#relax">Round 3: relaxing the judge</a></li>
+      <li><a href="#glossary">Glossary</a></li>
+    </ol>
+  </div>
+  </div>
+</nav>
+
+<main>
+<header class="hero">
+  <div class="eyebrow">A course built from your own project</div>
+  <h1>Teaching a network five lessons without it <span class="f">forgetting</span> the first four</h1>
+  <p class="lede">Everything you built in this project: from what a neural network is, to how your surprise, sleep and judge method beat simple replay on handwritten digits, and what happened when it met a stronger rival and harder data.</p>
+  <div class="pairs" aria-label="The five lessons">
+    <span class="pair"><small>L1</small>0 · 1</span><span class="arrow">→</span>
+    <span class="pair"><small>L2</small>2 · 3</span><span class="arrow">→</span>
+    <span class="pair"><small>L3</small>4 · 5</span><span class="arrow">→</span>
+    <span class="pair"><small>L4</small>6 · 7</span><span class="arrow">→</span>
+    <span class="pair"><small>L5</small>8 · 9</span>
+  </div>
+</header>
+
+<!-- ============================ PART 1 ============================ -->
+<section class="part" id="basics">
+  <div class="partno">Part 1</div>
+  <h2>Machine learning basics</h2>
+  <p>You need five ideas to follow everything else on this page. Each one is used directly in your code.</p>
+
+  <h3 id="network">What a neural network is</h3>
+  <p>A neural network is a function with a lot of adjustable numbers inside it. You give it an input (here, a 28 × 28 pixel image of a handwritten digit, which is 784 numbers between black and white) and it gives back an answer.</p>
+  <p>The adjustable numbers are called <strong>weights</strong>. Your MNIST model has about <strong>480,000</strong> of them. The network multiplies the 784 pixel values by weights, adds them up, passes them through a simple bend (a rule that turns negative numbers into zero), and repeats that through two layers of 400 units each. At the end come <strong>10 output numbers</strong>, one per digit.</p>
+  <p>Those 10 outputs are called <strong>logits</strong>. They are scores: the biggest one is the network's guess. If logit number 7 is the largest, the network is saying "this is a 7".</p>
+  <div class="note"><p>When the network is new, its weights are random, so its guesses are random: about 10% right. <strong>Learning means changing the weights</strong> until the right logit tends to be the largest.</p></div>
+
+  <h3 id="training">How training works</h3>
+  <p>Training is a loop. Each turn of the loop:</p>
+  <ol class="steps">
+    <li>Take a <strong>batch</strong> of 64 images with their correct labels.</li>
+    <li>Run them through the network and get its guesses.</li>
+    <li>Measure how wrong it was with a single number called the <strong>loss</strong>. We use cross-entropy loss: it is small when the network gave a high score to the right digit and large when it was confidently wrong.</li>
+    <li>Work out, for every weight, which direction would make the loss a bit smaller. That set of directions is the <strong>gradient</strong>. PyTorch computes it automatically.</li>
+    <li>Move every weight a small step in that direction. The size of the step is the <strong>learning rate</strong> (0.01 in your project).</li>
+  </ol>
+  <p>One pass of this loop is a <strong>training step</strong>. One pass over all of a lesson's images is an <strong>epoch</strong>. Your MNIST setup uses 2 epochs per lesson, which is about 340 steps per lesson and 1,694 steps in total.</p>
+  <p>This method is called <strong>gradient descent</strong>: picture the loss as a landscape and the training as walking downhill. Try it below. The curve is the loss for a single weight, and each step moves the weight downhill by <em>learning rate × slope</em>.</p>
+
+  <div class="bench" id="gd">
+    <div class="label">Try it · gradient descent on one weight</div>
+    <div class="controls">
+      <label for="lr" class="readout">learning rate <b id="lrv">0.30</b></label>
+      <input type="range" id="lr" min="0.05" max="1.10" step="0.05" value="0.30">
+      <button class="seg" id="gdstep" type="button">Take a step</button>
+      <button class="seg" id="gdrun" type="button">Take 10 steps</button>
+      <button class="seg" id="gdreset" type="button">Reset</button>
+    </div>
+    <svg viewBox="0 0 640 260" role="img" aria-label="Loss curve with the current weight shown as a dot">
+      <line class="axis" x1="40" y1="230" x2="620" y2="230"></line>
+      <path class="curve" id="gdcurve"></path>
+      <path class="trail" id="gdtrail"></path>
+      <circle class="ball" id="gdball" r="8"></circle>
+      <text class="tick" x="330" y="250" text-anchor="middle">weight value  (best value = 3)</text>
+    </svg>
+    <div class="readout" id="gdread">weight <b>-1.00</b> · loss <b>16.00</b> · step 0</div>
+  </div>
+  <p>With a small learning rate the dot creeps down slowly. Around 0.5 it lands in one step. Above 1.0 every step overshoots further than the last and the weight flies off. <strong>That is exactly the bug you hit with EWC</strong>: its penalty made some weights so "steep" that each step overshot, and the weights blew up to NaN ("not a number"). The fix capped the steepness so that one step can never overshoot.</p>
+
+  <h3 id="splits">Training data, validation data and test data</h3>
+  <p>A network can memorise its training images without learning the general idea of a "3". So you always check it on images it has never trained on. Your project keeps four separate piles of data for each lesson:</p>
+  <dl>
+    <div class="term"><dt>Train</dt><dd>About 90% of the lesson's images. The only data the network learns from.</dd></div>
+    <div class="term"><dt>Judge</dt><dd>40 held-out images per lesson. Only your method's judge uses them, to decide whether to undo an update. They count against its memory budget.</dd></div>
+    <div class="term"><dt>Validation (val)</dt><dd>The rest of the held-out images. Used to <em>choose settings</em>, such as EWC's penalty strength or your method's sleep length.</dd></div>
+    <div class="term"><dt>Test</dt><dd>The official MNIST test images. Only used to report final numbers, never to choose anything.</dd></div>
+  </dl>
+  <div class="note warn"><p><strong>Why the separation matters.</strong> If you pick settings by looking at test scores, you are quietly fitting to the test set, and your reported number is too optimistic. Every choice in this project was made on validation data.</p></div>
+
+  <h3 id="forgetting">Catastrophic forgetting</h3>
+  <p>Now the actual problem. Train the network on lesson 1 (0 vs 1) and it scores almost 100%. Then train it on lesson 2 (2 vs 3). Every training step now only looks at 2s and 3s, so the gradient only cares about getting 2s and 3s right. Nothing in the loop knows or cares why the weights had their old values. The weights that made it good at 0s and 1s get overwritten.</p>
+  <p>In your first run the result was total: after each new lesson, accuracy on every earlier lesson dropped to <strong>0.0%</strong>. This is called <strong>catastrophic forgetting</strong>, and stopping it is the whole field of <strong>continual learning</strong>.</p>
+  <h4>Two versions of the test</h4>
+  <ul>
+    <li><strong>Class-incremental (the hard one, your main test).</strong> At test time the network must pick from all 10 digits and is not told which lesson an image came from.</li>
+    <li><strong>Task-incremental (the easy one).</strong> The network is told "this image is from lesson 3", so it only has to choose between 4 and 5. Almost every method scores 98–99% here, so it can't separate good methods from bad ones.</li>
+  </ul>
+
+  <h3 id="measuring">Measuring forgetting</h3>
+  <p>After each lesson, you test on every lesson seen so far and write the scores in a grid. Row = "after training on lesson N", column = "score on lesson M". This is the <strong>accuracy matrix</strong>. Two numbers summarise it:</p>
+  <ul>
+    <li><strong>Final average accuracy (ACC):</strong> the average of the last row, the score on all 5 lessons at the end. Higher is better.</li>
+    <li><strong>Forgetting:</strong> for each old lesson, the best score it ever had minus its final score, averaged. Lower is better.</li>
+  </ul>
+  <p>These are your real results (averaged over 3 runs). Switch methods to see how each one forgets.</p>
+
+  <div class="bench" id="mx">
+    <div class="label">Explore · accuracy matrices from your runs</div>
+    <div class="controls" role="group" aria-label="Method">
+      <button class="seg" data-m="naive" type="button">Naive</button>
+      <button class="seg" data-m="ewc" type="button">EWC</button>
+      <button class="seg" data-m="replay" type="button">Replay</button>
+      <button class="seg" data-m="ours" type="button">Your method</button>
+      <span class="sep" aria-hidden="true"></span>
+      <button class="seg" data-s="class" type="button">Class-incremental</button>
+      <button class="seg" data-s="task" type="button">Task-incremental</button>
+    </div>
+    <div class="matrix" id="matrix" aria-live="polite"></div>
+    <div class="mstats">
+      <div class="ac"><b id="mxacc">–</b>final average accuracy</div>
+      <div class="fg"><b id="mxfg">–</b>forgetting</div>
+      <div><b id="mxsteps">–</b>training steps</div>
+    </div>
+    <p class="readout" id="mxnote" style="margin:12px 0 0"></p>
+  </div>
+</section>
+
+<!-- ============================ PART 2 ============================ -->
+<section class="part" id="code">
+  <div class="partno">Part 2</div>
+  <h2>The code, file by file</h2>
+
+  <h3 id="layout">How the project fits together</h3>
+  <p>Everything lives in <code>continual_learning/</code>. The design idea is that <strong>every method shares one training loop</strong>, and each method only changes the parts it needs to. That keeps the comparison fair: the methods differ only in the way they are meant to differ.</p>
+  <pre class="mermaid">
+flowchart LR
+  D["cl/data.py<br/>builds 5 lessons"] --> R["run_experiment.py<br/>runs one method"]
+  M["cl/model.py<br/>the network"] --> R
+  S["cl/strategies.py<br/>naive, replay, EWC, DER++"] --> R
+  O["cl/ours.py<br/>your method"] --> R
+  R --> J["results/*.json<br/>accuracy matrices"]
+  E["cl/metrics.py<br/>scoring"] --> R
+  J --> P["make_report.py<br/>table + charts"]
+  U["run_suite.py<br/>runs many experiments"] --> R
+  </pre>
+
+  <h3 id="files">Every file, explained</h3>
+  <div class="files">
+    <div class="file">
+      <span class="path">cl/data.py</span><span class="lines">105 lines</span>
+      <p>Downloads the dataset and cuts it into 5 lessons of two classes each. Each lesson gets the four piles described earlier: train, judge, val and test. Everything is loaded into memory at once, since MNIST is small. It now also handles CIFAR-10 (colour photos) for the harder test.</p>
+      <pre><code>tasks = make_split("mnist", seed=0)
+tasks[0]   <span class="c"># Task 0 classes=(0, 1) train=11399 judge=40 val=1226 test=2115</span></code></pre>
+    </div>
+    <div class="file">
+      <span class="path">cl/model.py</span><span class="lines">67 lines</span>
+      <p>The networks. <code>MLP</code> is the MNIST network: 784 inputs, two layers of 400, 10 outputs. <code>ReducedResNet18</code> is a small image network for CIFAR-10, the same one used in published continual-learning papers. Both have a single 10-way output shared by all lessons.</p>
+    </div>
+    <div class="file">
+      <span class="path">cl/metrics.py</span><span class="lines">75 lines</span>
+      <p>Scoring. <code>evaluate</code> measures accuracy on a set of images. It also builds the accuracy matrix and computes final average accuracy and forgetting. <code>active_logits</code> switches between the hard and easy versions of the test: in the easy one it hides the scores for digits outside the current lesson.</p>
+    </div>
+    <div class="file">
+      <span class="path">cl/strategies.py</span><span class="lines">286 lines</span>
+      <p>The shared training loop plus the baseline methods. The loop has five <strong>hooks</strong>, places where a method can change behaviour:</p>
+      <ul>
+        <li><code>before_task</code>: set up before a lesson (for example a fresh optimizer)</li>
+        <li><code>make_batch</code>: change the batch (replay adds old examples here)</li>
+        <li><code>extra_loss</code>: add to the loss (EWC adds its penalty here)</li>
+        <li><code>after_step</code>: after each step (replay saves examples here)</li>
+        <li><code>after_task</code>: after a lesson (EWC measures weight importance here)</li>
+      </ul>
+      <pre><code>for batch in lesson:
+    xb, yb = self.make_batch(x, y, task)                    <span class="c"># hook</span>
+    loss = self.task_loss(xb, yb, task) + self.extra_loss(xb, yb, task)
+    loss.backward(); optimizer.step()                       <span class="c"># gradient descent</span>
+    self.after_step(x, y, task)                             <span class="c"># hook</span></code></pre>
+      <p>Methods in this file: <code>Naive</code>, <code>Replay</code>, <code>EWC</code> and <code>DERPP</code> (DER++).</p>
+    </div>
+    <div class="file">
+      <span class="path">cl/ours.py</span><span class="lines">416 lines</span>
+      <p>Your method. It is long because it does a lot: surprise gating, two memories, sleep, the judge with undo, and targeted replay. Each part has an on/off switch (<code>use_surprise</code>, <code>use_sleep</code>, <code>use_judge</code>, <code>use_targeted</code>), so it can be tested with one part removed. It checks after every change that it never stores more than 500 examples in total.</p>
+    </div>
+    <div class="file">
+      <span class="path">run_experiment.py</span><span class="lines">165 lines</span>
+      <p>The command you actually run. It picks a method, trains it on the 5 lessons in order, tests after each lesson, prints the accuracy matrix, and saves everything to <code>results/&lt;method&gt;_&lt;scenario&gt;.json</code>. Flags choose the dataset, method, number of runs (<code>--seeds</code>), and settings (<code>--hp key=value</code>).</p>
+    </div>
+    <div class="file">
+      <span class="path">run_suite.py</span><span class="lines">147 lines</span>
+      <p>Runs the whole second round of experiments unattended: tuning DER++ on validation data, compute-matched baselines, and the CIFAR-10 benchmark. It runs MNIST on the CPU and CIFAR on the GPU at the same time and logs progress to <code>results/suite_progress.log</code>.</p>
+    </div>
+    <div class="file">
+      <span class="path">make_report.py</span><span class="lines">288 lines</span>
+      <p>Reads every results file and produces <code>results/summary.md</code> (the tables), <code>avg_acc.png</code> (score after each lesson) and <code>forgetting.png</code> (final scores side by side).</p>
+    </div>
+    <div class="file">
+      <span class="path">results/</span>
+      <p>One JSON file per method and test. Each holds the accuracy matrix for every run, the summary numbers, and stats such as training steps and rollbacks. <code>sweep_*</code> folders hold tuning runs on validation data.</p>
+    </div>
+  </div>
+
+  <h3 id="run">Running it yourself</h3>
+  <p>From the <code>continual_learning</code> folder:</p>
+<pre><code><span class="c"># one method, 3 runs, hard test</span>
+.venv/bin/python run_experiment.py --strategy replay --seeds 0 1 2
+
+<span class="c"># your method with the judge switched off</span>
+.venv/bin/python run_experiment.py --strategy ours --hp use_judge=False --tag no-judge
+
+<span class="c"># rebuild the table and charts</span>
+.venv/bin/python make_report.py</code></pre>
+  <p>A full 5-lesson MNIST run takes 2 to 10 seconds on your Mac's CPU.</p>
+</section>
+
+<!-- ============================ PART 3 ============================ -->
+<section class="part" id="experiment">
+  <div class="partno">Part 3</div>
+  <h2>The experiment</h2>
+
+  <h3 id="methods">The methods we compared</h3>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Method</th><th>Idea in one line</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Naive</strong></td><td>Just keep training. The "no protection" baseline.</td></tr>
+      <tr><td><strong>Replay</strong></td><td>Keep a notebook of 500 random old examples; mix 64 of them into every batch.</td></tr>
+      <tr><td><strong>EWC</strong></td><td>Measure which weights mattered for old lessons and penalise moving them.</td></tr>
+      <tr><td><strong>DER++</strong></td><td>Replay, but also remember the network's old output scores and keep them the same. Added in round two.</td></tr>
+    </tbody>
+  </table></div>
+  <p><strong>Why EWC fails the hard test.</strong> EWC protects old <em>weights</em>, but the final layer still only ever sees new digits during training, so it learns to always score new digits highest. Old lessons drop to 0% anyway. Replay works because old digits keep appearing in training, so the final layer keeps learning to tell old from new. This is a known result from published research, not a bug in your code.</p>
+
+  <h3 id="yours">Your method</h3>
+  <p>Five parts that work together, loosely inspired by how brains are thought to learn:</p>
+  <div class="parts5">
+    <div class="comp"><div class="n">Surprise gating</div><div class="tag">use_surprise</div><p>Compute each example's loss. Only learn from and store the ones that are unusually wrong.</p></div>
+    <div class="comp"><div class="n">Two memories</div><div class="tag">fast buffer + long-term</div><p>A 50-slot short-term notebook of recent surprising examples, and a balanced long-term store of old lessons.</p></div>
+    <div class="comp"><div class="n">Sleep</div><div class="tag">use_sleep</div><p>Every 25 steps and at the end of a lesson, pause and do 10 steps of mixed new + old review.</p></div>
+    <div class="comp"><div class="n">Judge with undo</div><div class="tag">use_judge</div><p>After each sleep, quiz old lessons on the judge sets. If any lesson lost more than 3 of 40, restore the saved weights and retry with more review.</p></div>
+    <div class="comp"><div class="n">Targeted replay</div><div class="tag">use_targeted</div><p>Review slipping lessons more often than stable ones.</p></div>
+  </div>
+  <h4>The undo, step by step</h4>
+  <ol class="steps">
+    <li>Save a full copy of the weights <em>and</em> the optimizer's memory of recent steps.</li>
+    <li>Train: wake steps, then a short sleep.</li>
+    <li>Judge quizzes every old lesson on 40 images each.</li>
+    <li>If an old lesson dropped by more than 3 correct answers, throw away the new weights and restore the copy. Retry with twice as much old-lesson review.</li>
+    <li>After 2 failed retries, accept anyway. Otherwise the network could never learn the new lesson.</li>
+  </ol>
+  <div class="note"><p><strong>Fair comparison.</strong> Your method gets exactly the same 500-example memory as replay, and the judge's 40 images per lesson count toward those 500. It cannot win just by remembering more.</p></div>
+
+  <h3 id="results">Results on MNIST</h3>
+  <p>Hard (class-incremental) test, test data, 3 runs each, mean ± standard deviation:</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Method</th><th class="num">Final accuracy</th><th class="num">Forgetting</th><th class="num">Training steps</th></tr></thead>
+    <tbody id="restable"></tbody>
+  </table></div>
+  <p>Your method wins by about <strong>4 points</strong> and forgets <strong>less than half as much</strong>. Its results also vary less between runs (± 0.4 vs ± 1.6). That was round 1. Round 2, further down, added a stronger rival.</p>
+  <h4>The trade-off hidden in the grid</h4>
+  <p>Look at the last row of your method's matrix above: it scores only <strong>85.8%</strong> on the newest lesson, where replay scores 97.5%. The judge keeps rejecting updates that hurt old lessons, which also slows down learning the new one. Holding on to old knowledge versus taking in new knowledge is called the <strong>stability–plasticity trade-off</strong>, and your method leans towards stability.</p>
+  <h4>The cost</h4>
+  <p>Your method uses <strong>1.7× the training steps</strong> of the baselines (2,824 vs 1,694), and the judge undoes about <strong>43 updates per run</strong>, throwing away roughly 45% of the steps it took. The tuning agent gave replay 2.5× more training and it did not improve, so the extra compute alone doesn't explain the gap. A cleaner compute-matched test is running now.</p>
+
+  <h3 id="ablations">Which parts matter</h3>
+  <p>An <strong>ablation</strong> removes one part and reruns. If the score drops, that part was doing work. Hard test, 3 runs each:</p>
+  <div class="bench">
+    <div class="label">Ablations · final accuracy on the hard test</div>
+    <div class="bars" id="ablbars"></div>
+    <div class="axisnote"><span>80%</span><span>90%</span></div>
+  </div>
+  <ul>
+    <li><strong>Judge and sleep do the real work.</strong> Removing either costs 1.8 to 3 points and doubles forgetting.</li>
+    <li><strong>Surprise gating and targeted replay don't clearly help.</strong> Their effect is smaller than the run-to-run noise.</li>
+  </ul>
+
+  <h3 id="bugs">Bugs we caught</h3>
+  <p>A reviewer agent tried to break the method before any final numbers were recorded. It found four real problems, all fixed:</p>
+  <ul>
+    <li><strong>Broken undo.</strong> PyTorch's optimizer kept sharing memory with the saved copy, so a second undo in a row didn't fully go back. Fixed by deep-copying the saved state.</li>
+    <li><strong>Misleading "no sleep" test.</strong> With sleep switched off, the retries still ran sleep-like training, so that ablation wasn't really removing sleep.</li>
+    <li><strong>Rounding error.</strong> The judge compared decimal fractions such as 1.0 − 0.95 against 0.05, which floating-point maths gets wrong. It now counts correct answers as whole numbers.</li>
+    <li><strong>Surprise gating barely did anything.</strong> Almost none of the surprising examples it picked out ever reached long-term memory.</li>
+  </ul>
+  <p>Plus the EWC overshoot bug from Part 1, which you can reproduce in the gradient-descent demo.</p>
+
+  <h3 id="prior">Is it new?</h3>
+  <p>Not really. Each part has been published before:</p>
+  <ul>
+    <li><strong>Surprise-based memory:</strong> <a href="https://arxiv.org/abs/2204.04763">InfoRS (2022)</a> and <a href="https://arxiv.org/pdf/2511.22367">SuRe (2025)</a>.</li>
+    <li><strong>Fast and slow memories:</strong> <a href="https://arxiv.org/abs/2201.12604">CLS-ER (2022)</a>.</li>
+    <li><strong>Sleep consolidation:</strong> <a href="https://arxiv.org/pdf/2401.08623.pdf">Wake-Sleep Consolidated Learning (2024)</a>.</li>
+    <li><strong>Targeted replay:</strong> <a href="https://proceedings.neurips.cc/paper/2019/hash/15825aee15eb335cc13f9b559f166ee8-Abstract.html">MIR (2019)</a>.</li>
+    <li><strong>Judge with undo:</strong> the least common part. <a href="https://arxiv.org/pdf/2004.07211v2.pdf">GEM and A-GEM</a> block harmful steps instead of undoing them.</li>
+  </ul>
+  <p>On this benchmark, published simple replay scores about 87% and <a href="https://arxiv.org/pdf/2305.18806">DER++ about 92%</a>. Your method's 89% sits between them. So the next step was to run DER++ in the same code, under the same rules.</p>
+
+  <h3 id="next">Round 2: DER++ and CIFAR-10</h3>
+  <p>Round 2 added three things:</p>
+  <ul>
+    <li><strong>DER++</strong>, the stronger rival from the research. It's replay that also remembers the network's old output scores for each stored example and trains it to keep producing them, so it remembers how confident it was about every class, not just the right answer. Same 500-example memory.</li>
+    <li><strong>Compute-matched baselines.</strong> Replay and DER++ also ran with more epochs, so they took <em>more</em> training steps than your method. That rules out "it just trained longer".</li>
+    <li><strong>Split CIFAR-10</strong>: colour photos (airplane, car, bird, cat, deer, dog, frog, horse, ship, truck) in 5 lessons of two classes, using a small ResNet image network. It ran on a free Kaggle GPU. Papers train 50 passes per lesson; this used 5, so absolute scores are lower than published ones. Only the comparison between methods counts.</li>
+  </ul>
+
+  <h4>MNIST: roughly a tie</h4>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Method</th><th class="num">Final accuracy</th><th class="num">Forgetting</th><th class="num">Training steps</th></tr></thead>
+    <tbody>
+      <tr><td>Replay</td><td class="num">84.8% ± 1.6</td><td class="num">17.4%</td><td class="num">1,694</td></tr>
+      <tr><td>Replay, extra training</td><td class="num">85.4% ± 1.0</td><td class="num">17.2%</td><td class="num">3,388</td></tr>
+      <tr class="us"><td>Your method</td><td class="num">89.1% ± 0.4</td><td class="num">7.1%</td><td class="num">2,824</td></tr>
+      <tr><td>DER++</td><td class="num">89.9% ± 0.8</td><td class="num">11.4%</td><td class="num">1,694</td></tr>
+      <tr><td>DER++, extra training</td><td class="num">89.6% ± 0.5</td><td class="num">12.1%</td><td class="num">3,388</td></tr>
+    </tbody>
+  </table></div>
+  <p>DER++ is 0.85 points ahead, about the size of the run-to-run noise. Your method still forgets the least.</p>
+
+  <h4>CIFAR-10: DER++ wins clearly</h4>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Method</th><th class="num">Final accuracy</th><th class="num">Forgetting</th><th class="num">Training steps</th></tr></thead>
+    <tbody>
+      <tr><td>Naive</td><td class="num">18.7% ± 0.3</td><td class="num">86.9%</td><td class="num">3,525</td></tr>
+      <tr><td>EWC</td><td class="num">16.3% ± 0.5</td><td class="num">76.5%</td><td class="num">3,525</td></tr>
+      <tr><td>Replay</td><td class="num">25.6% ± 2.1</td><td class="num">78.8%</td><td class="num">3,525</td></tr>
+      <tr><td>Replay, extra training</td><td class="num">27.9% ± 0.3</td><td class="num">79.2%</td><td class="num">7,755</td></tr>
+      <tr class="us"><td>Your method</td><td class="num">28.6% ± 1.7</td><td class="num">45.4%</td><td class="num">7,235</td></tr>
+      <tr><td>Your method, no judge</td><td class="num">24.5% ± 9.7</td><td class="num">59.1%</td><td class="num">4,975</td></tr>
+      <tr><td>DER++</td><td class="num">38.6% ± 2.0</td><td class="num">58.2%</td><td class="num">3,525</td></tr>
+      <tr><td>DER++, extra training</td><td class="num">43.0% ± 1.1</td><td class="num">54.2%</td><td class="num">7,755</td></tr>
+    </tbody>
+  </table></div>
+  <p>Your method's forgetting looks best, but the accuracy grid explains why. This is each method's score on a lesson <em>right after learning it</em> (the grid's diagonal):</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Method</th><th class="num">L1</th><th class="num">L2</th><th class="num">L3</th><th class="num">L4</th><th class="num">L5</th></tr></thead>
+    <tbody>
+      <tr><td>DER++</td><td class="num">96</td><td class="num">70</td><td class="num">79</td><td class="num">88</td><td class="num">92</td></tr>
+      <tr><td>Replay</td><td class="num">95</td><td class="num">76</td><td class="num">83</td><td class="num">95</td><td class="num">94</td></tr>
+      <tr class="us"><td>Your method</td><td class="num">92</td><td class="num">62</td><td class="num">50</td><td class="num">54</td><td class="num">68</td></tr>
+    </tbody>
+  </table></div>
+  <p>Your method never learns the new lessons well. Forgetting is measured from a lesson's best score, and a lesson that only reached 50% has little to lose. The judge keeps undoing updates that hurt old lessons, and those same updates are how the new lesson gets learned. This is the <strong>stability–plasticity trade-off</strong> tipped too far towards stability.</p>
+  <p>The judge still matters: without it, your method collapsed to naive level (17–18%) on 2 of 3 runs and got lucky on the third (38%). Its real job on CIFAR is preventing collapse.</p>
+  <div class="note warn"><p><strong>One fairness caveat.</strong> The learning rate and DER++'s settings were tuned on CIFAR validation data, while your method kept its MNIST settings. That favours DER++, though probably not by 10 points.</p></div>
+
+  <h3 id="relax">Round 3: relaxing the judge</h3>
+  <p>If the judge is too strict, loosen it. Four ways were tested: the first was already a setting, and the other three are new switches, all off by default.</p>
+  <ul>
+    <li><strong>Allow bigger drops</strong>: reject only when an old lesson loses more than N of its 40 judge images (normally 3).</li>
+    <li><strong>Average, not any</strong>: reject only when old lessons dropped a lot <em>on average</em>, rather than whenever a single one slipped.</li>
+    <li><strong>Stop judging once learned</strong>: when the new lesson reaches a target accuracy, stop judging for the rest of it.</li>
+    <li><strong>Trade-off rule</strong>: also accept an update if what it gained on the new lesson outweighs what it cost the old ones.</li>
+  </ul>
+  <h4>MNIST: it works as designed, but there was little to gain</h4>
+  <p>Relaxing raised the new-lesson score from 94.6% to as high as 98.9%, but forgetting rose faster. The best setting (allow 5 of 40) reached <strong>89.6% ± 0.7</strong> on test data, up from 89.1% and level with DER++'s 89.9%. All three are tied within noise.</p>
+  <p>"Stop judging once learned" never helped: every threshold scored below the strict judge, because it let forgetting back in for the rest of each lesson.</p>
+  <h4>CIFAR-10: relaxing doesn't help</h4>
+  <p>Six judge settings were tuned on CIFAR validation data. The best ("allow 8 drops") scored <strong>27.9% ± 2.4</strong> on test data, against the strict judge's 28.6%. The top four settings were within half a point of each other, which is just noise, and new-lesson scores barely moved (65% → 66%).</p>
+  <h4>The real cause: the undo throws away new learning</h4>
+  <p>The run statistics showed what's happening. On CIFAR the judge rejects almost every update: about 226 undos per run, against 43 on MNIST. Each undo restores the saved copy of the network, and that also discards everything it just learned from the new lesson's images. The retry then only practises on the few hundred examples held in memory.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Run</th><th class="num">Training steps on new images</th><th class="num">Thrown away by undos</th></tr></thead>
+    <tbody>
+      <tr><td>MNIST, strict judge</td><td class="num">1,694</td><td class="num">50%</td></tr>
+      <tr class="us"><td>CIFAR-10, strict judge</td><td class="num">3,525</td><td class="num">80%</td></tr>
+      <tr><td>CIFAR-10, allow 8 drops</td><td class="num">3,525</td><td class="num">80%</td></tr>
+    </tbody>
+  </table></div>
+  <p>So four fifths of each new lesson's training is discarded, which is why new lessons stall around 65%. Loosening the threshold can't fix that: learning new classes always costs old classes something, and on CIFAR that cost is bigger than even 8 of 40. The 40-image quiz is also noisy, swinging by about ±3 correct answers by chance alone.</p>
+  <div class="note"><p><strong>What this suggests.</strong> The judge should guard old lessons without throwing away new learning. For example, the undo could restore only the sleep phase and keep the training on new images, or the retry could also practise on new images.</p></div>
+
+  <h3 id="glossary">Glossary</h3>
+  <dl>
+    <div class="term"><dt>Weights</dt><dd>The adjustable numbers inside a network. Learning changes them.</dd></div>
+    <div class="term"><dt>Logits</dt><dd>The network's 10 output scores, one per class. The largest is its guess.</dd></div>
+    <div class="term"><dt>Loss</dt><dd>One number measuring how wrong the guesses were.</dd></div>
+    <div class="term"><dt>Gradient</dt><dd>For each weight, the direction that reduces the loss.</dd></div>
+    <div class="term"><dt>Learning rate</dt><dd>How big a step each update takes.</dd></div>
+    <div class="term"><dt>Batch / step</dt><dd>A group of 64 examples, and one update using them.</dd></div>
+    <div class="term"><dt>Epoch</dt><dd>One pass over all of a lesson's training images.</dd></div>
+    <div class="term"><dt>Optimizer</dt><dd>The code that applies the updates. Ours (SGD with momentum) also remembers recent steps, which is why the undo must restore it too.</dd></div>
+    <div class="term"><dt>Seed</dt><dd>A number that fixes the randomness, so a run can be repeated exactly. "3 seeds" means 3 independent runs.</dd></div>
+    <div class="term"><dt>Baseline</dt><dd>A standard method to compare against.</dd></div>
+    <div class="term"><dt>Ablation</dt><dd>Rerunning with one part removed, to see what it contributes.</dd></div>
+    <div class="term"><dt>Hyperparameter</dt><dd>A setting chosen by you rather than learned, such as learning rate or sleep length.</dd></div>
+    <div class="term"><dt>Stability–plasticity</dt><dd>The trade-off between keeping old knowledge and learning new knowledge.</dd></div>
+  </dl>
+
+  <footer>Built from the code and result files in <code>continual_learning/</code>. Numbers are means over 3 runs on test data, hard (class-incremental) setting unless stated. CIFAR-10 results come from a Kaggle T4 GPU.</footer>
+</section>
+</main>
+</div>
+
+<script>
+const DATA = /*DATA*/{"naive_class":{"m":[[99.9,null,null,null,null],[0.0,98.4,null,null,null],[0.0,0.0,99.1,null,null],[0.0,0.0,0.0,99.4,null],[0.0,0.0,0.0,0.0,98.2]],"acc":19.64,"accsd":0.04,"fg":99.23,"fgsd":0.09,"steps":1694},"replay_class":{"m":[[99.8,null,null,null,null],[97.5,98.1,null,null,null],[96.7,86.5,99.2,null,null],[95.5,85.0,87.9,98.6,null],[91.5,74.5,75.4,84.9,97.5]],"acc":84.76,"accsd":1.61,"fg":17.36,"fgsd":1.99,"steps":1694},"ewc_class":{"m":[[99.9,null,null,null,null],[0.0,98.4,null,null,null],[0.0,10.7,99.6,null,null],[0.0,0.3,7.4,99.5,null],[0.0,0.0,0.0,15.9,98.0]],"acc":22.8,"accsd":1.44,"fg":95.39,"fgsd":1.84,"steps":1694},"ours_class":{"m":[[99.9,null,null,null,null],[98.1,98.7,null,null,null],[97.7,93.7,93.9,null,null],[97.0,90.7,93.1,94.4,null],[94.6,85.3,88.1,91.3,85.8]],"acc":89.05,"accsd":0.44,"fg":7.08,"fgsd":0.82,"steps":2824},"naive_task":{"m":[[100.0,null,null,null,null],[99.9,99.1,null,null,null],[99.9,95.5,99.9,null,null],[99.9,95.5,99.5,99.7,null],[99.9,95.2,99.1,98.3,98.8]],"acc":98.29,"accsd":0.26,"fg":1.51,"fgsd":0.28,"steps":1694},"replay_task":{"m":[[99.9,null,null,null,null],[100.0,98.5,null,null,null],[100.0,97.7,99.8,null,null],[99.9,97.2,99.4,99.7,null],[99.9,97.3,99.2,99.3,98.5]],"acc":98.85,"accsd":0.07,"fg":0.55,"fgsd":0.02,"steps":1694},"ewc_task":{"m":[[100.0,null,null,null,null],[100.0,99.0,null,null,null],[100.0,99.0,99.6,null,null],[100.0,99.0,99.6,99.5,null],[99.9,98.9,99.7,99.4,98.0]],"acc":99.16,"accsd":0.07,"fg":0.07,"fgsd":0.04,"steps":1694},"ours_task":{"m":[[99.9,null,null,null,null],[100.0,99.1,null,null,null],[100.0,98.2,99.9,null,null],[99.9,97.5,99.9,99.8,null],[99.9,97.3,99.5,99.1,99.2]],"acc":99.01,"accsd":0.09,"fg":0.74,"fgsd":0.11,"steps":2394},"ours_class_no-judge":{"acc":87.27,"accsd":0.6,"fg":14.45},"ours_class_no-sleep":{"acc":86.09,"accsd":0.3,"fg":13.64},"ours_class_no-surprise":{"acc":87.65,"accsd":1.95,"fg":5.25},"ours_class_no-targeted":{"acc":88.44,"accsd":1.18,"fg":7.95}};
+
+const NAMES = { naive: "Naive", ewc: "EWC", replay: "Replay", ours: "Your method" };
+const NOTES = {
+  naive_class: "Each new lesson wipes every earlier one to 0%. Only the diagonal (the lesson just learned) survives.",
+  ewc_class: "Barely better than naive: protecting weights doesn't stop the final layer from always picking the newest digits.",
+  replay_class: "Old lessons fade but stay alive, because 500 stored examples keep showing up in training.",
+  ours_class: "Old lessons stay highest of all, but the newest lesson only reaches 85.8%: the judge trades new learning for stability.",
+};
+
+/* ---------- accuracy matrix explorer ---------- */
+let curM = "ours", curS = "class";
+function fmt(v) { return v.toFixed(1); }
+function renderMatrix() {
+  const d = DATA[`${curM}_${curS}`];
+  const el = document.getElementById("matrix");
+  let html = '<div class="h"></div>';
+  for (let j = 0; j < 5; j++) html += `<div class="h">L${j + 1}</div>`;
+  d.m.forEach((row, i) => {
+    html += `<div class="h rh">after L${i + 1}</div>`;
+    row.forEach(v => {
+      if (v === null) { html += '<div class="cell empty"></div>'; return; }
+      const p = Math.max(0, Math.min(100, v));
+      html += `<div class="cell${p > 55 ? " dark" : ""}" style="background:color-mix(in oklab, var(--hi) ${p}%, var(--lo))" title="${fmt(v)}%">${v >= 99.95 ? "100" : fmt(v)}</div>`;
+    });
+  });
+  el.innerHTML = html;
+  document.getElementById("mxacc").textContent = `${d.acc.toFixed(1)}%`;
+  document.getElementById("mxfg").textContent = `${d.fg.toFixed(1)}%`;
+  document.getElementById("mxsteps").textContent = d.steps.toLocaleString();
+  document.getElementById("mxnote").textContent = curS === "class"
+    ? NOTES[`${curM}_class`]
+    : "With the lesson given away, every method stays around 98–99%. That's why the hard test is the one that matters.";
+  document.querySelectorAll("#mx [data-m]").forEach(b => b.setAttribute("aria-pressed", b.dataset.m === curM));
+  document.querySelectorAll("#mx [data-s]").forEach(b => b.setAttribute("aria-pressed", b.dataset.s === curS));
+}
+document.querySelectorAll("#mx [data-m]").forEach(b => b.addEventListener("click", () => { curM = b.dataset.m; renderMatrix(); }));
+document.querySelectorAll("#mx [data-s]").forEach(b => b.addEventListener("click", () => { curS = b.dataset.s; renderMatrix(); }));
+renderMatrix();
+
+/* ---------- results table ---------- */
+(function () {
+  const rows = ["naive", "ewc", "replay", "ours"].map(m => {
+    const d = DATA[`${m}_class`];
+    return `<tr${m === "ours" ? ' class="us"' : ""}><td>${NAMES[m]}</td><td class="num">${d.acc.toFixed(1)}% ± ${d.accsd.toFixed(1)}</td><td class="num">${d.fg.toFixed(1)}%</td><td class="num">${d.steps.toLocaleString()}</td></tr>`;
+  });
+  document.getElementById("restable").innerHTML = rows.join("");
+})();
+
+/* ---------- ablation bars (80–90% axis) ---------- */
+(function () {
+  const items = [
+    ["Full method", DATA.ours_class, true],
+    ["No targeted replay", DATA["ours_class_no-targeted"]],
+    ["No surprise gating", DATA["ours_class_no-surprise"]],
+    ["No judge", DATA["ours_class_no-judge"]],
+    ["No sleep", DATA["ours_class_no-sleep"]],
+    ["Replay baseline", DATA.replay_class],
+  ];
+  const lo = 80, hi = 90;
+  document.getElementById("ablbars").innerHTML = items.map(([n, d, us]) => {
+    const w = Math.max(0, Math.min(100, (d.acc - lo) / (hi - lo) * 100));
+    return `<div class="bar${us ? " us" : ""}"><span>${n}</span><span class="track"><span class="fill" style="width:${w}%"></span></span><span class="v">${d.acc.toFixed(1)}%</span></div>`;
+  }).join("");
+})();
+
+/* ---------- gradient descent demo: loss(w) = (w-3)^2 ---------- */
+(function () {
+  const X0 = 40, X1 = 620, Y0 = 230, Y1 = 20, WMIN = -2, WMAX = 8, LMAX = 26;
+  const sx = w => X0 + (w - WMIN) / (WMAX - WMIN) * (X1 - X0);
+  const sy = l => Y0 - Math.min(l, LMAX) / LMAX * (Y0 - Y1);
+  const loss = w => (w - 3) ** 2;
+  let pts = []; for (let w = WMIN; w <= WMAX + 1e-9; w += 0.05) pts.push(`${sx(w).toFixed(1)},${sy(loss(w)).toFixed(1)}`);
+  document.getElementById("gdcurve").setAttribute("d", "M" + pts.join(" L"));
+  const lr = document.getElementById("lr"), lrv = document.getElementById("lrv");
+  let w = -1, n = 0, trail = [[w, loss(w)]];
+  function draw() {
+    const ball = document.getElementById("gdball");
+    const off = w < WMIN || w > WMAX || !isFinite(w);
+    const cw = Math.max(WMIN, Math.min(WMAX, isFinite(w) ? w : WMAX));
+    ball.setAttribute("cx", sx(cw)); ball.setAttribute("cy", sy(loss(cw)));
+    ball.classList.toggle("boom", off);
+    document.getElementById("gdtrail").setAttribute("d", "M" + trail.map(([a, l]) =>
+      `${sx(Math.max(WMIN, Math.min(WMAX, a))).toFixed(1)},${sy(l).toFixed(1)}`).join(" L"));
+    const L = loss(w);
+    document.getElementById("gdread").innerHTML = off
+      ? `weight <b>${isFinite(w) ? w.toExponential(1) : "NaN"}</b> · loss <b>${isFinite(L) ? L.toExponential(1) : "NaN"}</b> · step ${n} · <b style="color:var(--forget)">diverged: every step overshoots more</b>`
+      : `weight <b>${w.toFixed(2)}</b> · loss <b>${L.toFixed(2)}</b> · step ${n}`;
+  }
+  function step() { if (!isFinite(w) || Math.abs(w) > 1e6) return; w = w - parseFloat(lr.value) * 2 * (w - 3); n++; trail.push([w, loss(w)]); draw(); }
+  lr.addEventListener("input", () => { lrv.textContent = parseFloat(lr.value).toFixed(2); });
+  document.getElementById("gdstep").addEventListener("click", step);
+  document.getElementById("gdrun").addEventListener("click", () => { for (let i = 0; i < 10; i++) step(); });
+  document.getElementById("gdreset").addEventListener("click", () => { w = -1; n = 0; trail = [[w, loss(w)]]; draw(); });
+  draw();
+})();
+</script>

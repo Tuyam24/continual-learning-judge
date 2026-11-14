@@ -1,0 +1,82 @@
+{
+  "dataset": "cifar10",
+  "strategy": "replay",
+  "config": {
+    "epochs": 5,
+    "batch_size": 64,
+    "lr": 0.01,
+    "momentum": 0.9,
+    "scenario": "class"
+  },
+  "hparams": {
+    "mem_size": 500,
+    "ewc_lambda": 10000.0,
+    "fisher_samples": 1000,
+    "der_alpha": 0.5,
+    "der_beta": 0.5
+  },
+  "eval_split": "val",
+  "device": "cuda",
+  "n_tasks": 5,
+  "summary": {
+    "final_avg_acc_mean": 0.2679166666666667,
+    "final_avg_acc_std": 0.0,
+    "forgetting_mean": 0.74140625,
+    "forgetting_std": 0.0
+  },
+  "runs": [
+    {
+      "seed": 0,
+      "acc_matrix": [
+        [
+          0.94375,
+          NaN,
+          NaN,
+          NaN,
+          NaN
+        ],
+        [
+          0.465625,
+          0.7489583333333333,
+          NaN,
+          NaN,
+          NaN
+        ],
+        [
+          0.23333333333333334,
+          0.009375,
+          0.7177083333333333,
+          NaN,
+          NaN
+        ],
+        [
+          0.2833333333333333,
+          0.007291666666666667,
+          0.025,
+          0.9489583333333333,
+          NaN
+        ],
+        [
+          0.009375,
+          0.016666666666666666,
+          0.078125,
+          0.28958333333333336,
+          0.9458333333333333
+        ]
+      ],
+      "avg_acc_curve": [
+        0.94375,
+        0.6072916666666667,
+        0.32013888888888886,
+        0.31614583333333335,
+        0.2679166666666667
+      ],
+      "final_avg_acc": 0.2679166666666667,
+      "forgetting": 0.74140625,
+      "runtime_s": 528.8494000434875,
+      "stats": {
+        "grad_steps": 3525
+      }
+    }
+  ]
+}

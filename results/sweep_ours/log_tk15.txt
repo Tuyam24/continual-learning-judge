@@ -1,0 +1,7 @@
+strategy=ours scenario=class eval=val device=cpu cfg={'epochs': 2, 'batch_size': 64, 'lr': 0.01, 'momentum': 0.9, 'scenario': 'class'} hparams={'mem_size': 500, 'ewc_lambda': 10000.0, 'fisher_samples': 1000, 'target_k': 15.0}
+  final avg acc = 88.33%   forgetting = 11.13%
+
+  final avg acc = 88.61%   forgetting = 10.74%
+
+== ours (class-IL, 2 seed(s)): ACC 88.47 ± 0.14%  forgetting 10.94 ± 0.19%  [val]
+saved results/sweep_ours/ours_class_tk15_val.json

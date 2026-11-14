@@ -1,0 +1,22 @@
+[21:40:26] suite start (only=cifar10)
+[21:40:26] CIFAR: choosing learning rate with replay on val (seed 0)
+[21:49:29] cifar replay val lr=0.01: ACC 26.79 ± 0.00  forgetting 74.14  (543s)
+[21:52:18] cifar replay val lr=0.03: ACC 29.62 ± 0.00  forgetting 73.28  (169s)
+[21:55:06] cifar replay val lr=0.1: ACC 26.06 ± 0.00  forgetting 76.85  (168s)
+[21:55:06] CIFAR: lr=0.03 (val ACC 29.62)
+[21:55:06] CIFAR: choosing DER++ alpha on val (seed 0)
+[21:59:20] cifar derpp val alpha=0.1: ACC 34.92 ± 0.00  forgetting 62.32  (254s)
+[22:03:33] cifar derpp val alpha=0.3: ACC 35.48 ± 0.00  forgetting 61.22  (253s)
+[22:07:47] cifar derpp val alpha=1.0: ACC 34.85 ± 0.00  forgetting 58.20  (254s)
+[22:07:47] CIFAR: DER++ alpha=0.3 (val ACC 35.48)
+[22:12:12] cifar naive class test: ACC 18.69 ± 0.26  forgetting 86.89  (265s)
+[22:20:32] cifar replay class test: ACC 25.56 ± 2.11  forgetting 78.75  (500s)
+[22:33:07] cifar derpp class test: ACC 38.64 ± 2.03  forgetting 58.24  (755s)
+[22:52:42] cifar ours class test: ACC 28.56 ± 1.69  forgetting 45.36  (1175s)
+[22:58:03] cifar ewc class test: ACC 16.30 ± 0.52  forgetting 76.55  (321s)
+[23:06:35] cifar ours no-judge class test: ACC 24.54 ± 9.72  forgetting 59.05  (512s)
+[23:06:35] CIFAR: ours/replay grad-step ratio 2.05 -> compute-matched epochs 11
+[23:24:30] cifar replay class test, 11 epochs (compute-matched): ACC 27.94 ± 0.29  forgetting 79.18  (1075s)
+[23:51:46] cifar derpp class test, 11 epochs (compute-matched): ACC 43.04 ± 1.05  forgetting 54.21  (1636s)
+[23:51:46] CIFAR chain done
+[23:51:46] suite done

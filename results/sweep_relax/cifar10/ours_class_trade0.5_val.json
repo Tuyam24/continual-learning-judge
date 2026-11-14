@@ -1,0 +1,258 @@
+{
+  "dataset": "cifar10",
+  "strategy": "ours",
+  "config": {
+    "epochs": 5,
+    "batch_size": 64,
+    "lr": 0.03,
+    "momentum": 0.9,
+    "scenario": "class"
+  },
+  "hparams": {
+    "mem_size": 500,
+    "ewc_lambda": 10000.0,
+    "fisher_samples": 1000,
+    "der_alpha": 0.5,
+    "der_beta": 0.5,
+    "judge_tradeoff": 0.5
+  },
+  "eval_split": "val",
+  "device": "cuda",
+  "n_tasks": 5,
+  "summary": {
+    "final_avg_acc_mean": 0.23208333333333334,
+    "final_avg_acc_std": 0.06708333333333336,
+    "forgetting_mean": 0.5325520833333333,
+    "forgetting_std": 0.0940104166666666
+  },
+  "runs": [
+    {
+      "seed": 0,
+      "acc_matrix": [
+        [
+          0.9229166666666667,
+          NaN,
+          NaN,
+          NaN,
+          NaN
+        ],
+        [
+          0.6958333333333333,
+          0.6395833333333333,
+          NaN,
+          NaN,
+          NaN
+        ],
+        [
+          0.775,
+          0.14375,
+          0.5270833333333333,
+          NaN,
+          NaN
+        ],
+        [
+          0.5583333333333333,
+          0.06458333333333334,
+          0.21666666666666667,
+          0.6375,
+          NaN
+        ],
+        [
+          0.225,
+          0.096875,
+          0.25104166666666666,
+          0.4,
+          0.5229166666666667
+        ]
+      ],
+      "avg_acc_curve": [
+        0.9229166666666667,
+        0.6677083333333333,
+        0.48194444444444445,
+        0.3692708333333333,
+        0.2991666666666667
+      ],
+      "final_avg_acc": 0.2991666666666667,
+      "forgetting": 0.4385416666666667,
+      "runtime_s": 354.2031955718994,
+      "stats": {
+        "wake_steps": 3525,
+        "sleep_steps": 1450,
+        "retry_steps": 1650,
+        "grad_steps": 6625,
+        "discarded_wake_steps": 2745,
+        "discarded_sleep_steps": 1130,
+        "discarded_retry_steps": 520,
+        "consolidations": 145,
+        "judge_evals": 281,
+        "rollbacks": 165,
+        "retries": 165,
+        "forced_accepts": 34,
+        "samples_seen": 225000,
+        "samples_learned": 174720,
+        "samples_stored_fast": 28224,
+        "ltm_candidates": 28224,
+        "max_mem_used": 500,
+        "max_judge_drift": 0.65,
+        "tradeoff_accepts": 76,
+        "judge_stopped_tasks": 0,
+        "per_task": [
+          {
+            "task": 0,
+            "rollbacks": 0,
+            "forced_accepts": 0,
+            "max_judge_drift": 0.0,
+            "grad_steps": 995,
+            "mem_used_end": 450
+          },
+          {
+            "task": 1,
+            "rollbacks": 43,
+            "forced_accepts": 9,
+            "max_judge_drift": 0.3,
+            "grad_steps": 1425,
+            "mem_used_end": 448
+          },
+          {
+            "task": 2,
+            "rollbacks": 44,
+            "forced_accepts": 7,
+            "max_judge_drift": 0.65,
+            "grad_steps": 1435,
+            "mem_used_end": 450
+          },
+          {
+            "task": 3,
+            "rollbacks": 39,
+            "forced_accepts": 7,
+            "max_judge_drift": 0.375,
+            "grad_steps": 1385,
+            "mem_used_end": 448
+          },
+          {
+            "task": 4,
+            "rollbacks": 39,
+            "forced_accepts": 11,
+            "max_judge_drift": 0.575,
+            "grad_steps": 1385,
+            "mem_used_end": 450
+          }
+        ]
+      }
+    },
+    {
+      "seed": 1,
+      "acc_matrix": [
+        [
+          0.9197916666666667,
+          NaN,
+          NaN,
+          NaN,
+          NaN
+        ],
+        [
+          0.7208333333333333,
+          0.6010416666666667,
+          NaN,
+          NaN,
+          NaN
+        ],
+        [
+          0.6479166666666667,
+          0.10833333333333334,
+          0.54375,
+          NaN,
+          NaN
+        ],
+        [
+          0.5927083333333333,
+          0.052083333333333336,
+          0.28854166666666664,
+          0.48854166666666665,
+          NaN
+        ],
+        [
+          0.0375,
+          0.0,
+          0.009375,
+          0.0,
+          0.778125
+        ]
+      ],
+      "avg_acc_curve": [
+        0.9197916666666667,
+        0.6609375,
+        0.43333333333333335,
+        0.35546875,
+        0.16499999999999998
+      ],
+      "final_avg_acc": 0.16499999999999998,
+      "forgetting": 0.6265624999999999,
+      "runtime_s": 340.23457050323486,
+      "stats": {
+        "wake_steps": 3525,
+        "sleep_steps": 1450,
+        "retry_steps": 1510,
+        "grad_steps": 6485,
+        "discarded_wake_steps": 2370,
+        "discarded_sleep_steps": 980,
+        "discarded_retry_steps": 530,
+        "consolidations": 145,
+        "judge_evals": 267,
+        "rollbacks": 151,
+        "retries": 151,
+        "forced_accepts": 40,
+        "samples_seen": 225000,
+        "samples_learned": 178454,
+        "samples_stored_fast": 28817,
+        "ltm_candidates": 28817,
+        "max_mem_used": 500,
+        "max_judge_drift": 0.475,
+        "tradeoff_accepts": 73,
+        "judge_stopped_tasks": 0,
+        "per_task": [
+          {
+            "task": 0,
+            "rollbacks": 0,
+            "forced_accepts": 0,
+            "max_judge_drift": 0.0,
+            "grad_steps": 995,
+            "mem_used_end": 450
+          },
+          {
+            "task": 1,
+            "rollbacks": 41,
+            "forced_accepts": 10,
+            "max_judge_drift": 0.35,
+            "grad_steps": 1405,
+            "mem_used_end": 448
+          },
+          {
+            "task": 2,
+            "rollbacks": 49,
+            "forced_accepts": 13,
+            "max_judge_drift": 0.475,
+            "grad_steps": 1485,
+            "mem_used_end": 450
+          },
+          {
+            "task": 3,
+            "rollbacks": 42,
+            "forced_accepts": 10,
+            "max_judge_drift": 0.375,
+            "grad_steps": 1415,
+            "mem_used_end": 448
+          },
+          {
+            "task": 4,
+            "rollbacks": 19,
+            "forced_accepts": 7,
+            "max_judge_drift": 0.425,
+            "grad_steps": 1185,
+            "mem_used_end": 450
+          }
+        ]
+      }
+    }
+  ]
+}

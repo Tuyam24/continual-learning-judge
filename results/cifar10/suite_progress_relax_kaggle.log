@@ -1,0 +1,12 @@
+[05:39:07] suite start (chains=relax_cifar10)
+[05:39:07] cifar10: tuning the relaxed judge on val (seeds 0 1)
+[05:58:03] cifar10 ours val strict: ACC 27.75 ± 0.63  forgetting 44.06  (1136s)
+[06:12:17] cifar10 ours val any_d5: ACC 27.72 ± 1.70  forgetting 43.10  (854s)
+[06:25:04] cifar10 ours val any_d8: ACC 28.21 ± 2.37  forgetting 43.79  (767s)
+[06:38:06] cifar10 ours val mean_d5: ACC 27.96 ± 1.87  forgetting 48.02  (782s)
+[06:49:44] cifar10 ours val trade0.5: ACC 23.21 ± 6.71  forgetting 53.26  (698s)
+[07:03:54] cifar10 ours val until0.8: ACC 25.17 ± 2.90  forgetting 41.43  (850s)
+[07:03:54] cifar10: relaxed judge chosen = any_d8 (val ACC 28.21)
+[07:23:45] cifar10 ours class test, relaxed judge (any_d8): ACC 27.90 ± 2.39  forgetting 47.80  (1191s)
+[07:23:45] cifar10 relax chain done
+[07:23:45] suite done
